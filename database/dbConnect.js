@@ -3,7 +3,7 @@ import { configDotenv } from "dotenv"
 
 configDotenv()
 const { connect, connection } = mongoose
-const URI = process.env.DATABASEURL || "mongodb+srv://fakiletemitope2:*.Oluwaseyi88.*@cluster0.to8n4fl.mongodb.net/learning_platform?retryWrites=true&w=majority&appName=Cluster0"
+const URI = process.env.DATABASEURL 
 
 
 export const dbConnect = async () => {

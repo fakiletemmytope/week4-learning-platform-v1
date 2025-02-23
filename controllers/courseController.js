@@ -2,6 +2,7 @@ import { decode } from "jsonwebtoken"
 import { dbClose, dbConnect } from "../database/dbConnect.js"
 import { course_router } from "../routes/course.js"
 import { CourseModel } from "../schema/course.js"
+import { UserModel } from "../schema/user.js"
 
 const get_courses = async (req, res) => {
     try {
@@ -19,7 +20,7 @@ const get_course = async (req, res) => {
     const id = req.params.id
     try {
         await dbConnect()
-        const course = await CourseModel.findById(id, "title instructor duration _id price description")
+        const course = (req.decode === "authenticated user") ? await CourseModel.findById(id, "title instructor duration _id price description").populate('lessons') : await CourseModel.findById(id, "title instructor duration _id price description")
         if (!course) return res.status(404).send("Course not found")
         res.status(200).json(course)
     } catch (error) {
@@ -34,8 +35,11 @@ const create_course = async (req, res) => {
     const { title, description, price, duration } = req.body
     const course = new CourseModel({ title, description, price, duration, instructor: req.decode._id })
     try {
-        dbConnect()
+        await dbConnect()
         const savedCourse = await course.save()
+        const user = await UserModel.findById(req.decode._id)
+        user.courses.push(savedCourse)
+        await user.save()
         res.status(200).json(savedCourse)
     } catch (err) {
         res.status(400).send(err.message)
@@ -51,10 +55,6 @@ const update_course = async (req, res) => {
     if (description) update.description = description
     if (duration) update.duration = duration
     if (price) update.price = price
-    // if (Object.keys(update).length === 0) {
-    //     res.status(400).send("Nothing to update");
-    //     return
-    // }
     try {
         await dbConnect()
         let updated_course = null

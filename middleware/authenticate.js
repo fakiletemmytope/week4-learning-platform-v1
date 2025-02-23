@@ -24,7 +24,32 @@ export const authenticate = async (req, res, next) => {
             return res.status(400).send(err.message)
         }
     }
+}
 
+export const unrestricted = async (req, res, next) => {
+    const auth = req.headers.authorization
+    if (!auth) {
+        req.decode = "unauthenticated user"
+        next()
+    }
+    else {
+        try {
+            const token = auth.split(" ")[1]
+            const is_token_blacklisted = await isTokenBlacklisted(token)
+            if (is_token_blacklisted) return res.status(400).send("Token not valid")
+            const decode = await verifyToken(token)
+            if (decode._id) {
+                req.decode = "authenticated user"
+                next()
+            }
+            else {
+                req.decode = "unauthenticated user"
+                next()
+            }
+        } catch (err) {
+            return res.status(400).send(err.message)
+        }
+    }
 }
 
 export const isAdmin = async (req, res, next) => {

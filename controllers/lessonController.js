@@ -2,6 +2,7 @@ import { dbClose, dbConnect } from "../database/dbConnect.js"
 import { LessonModel } from "../schema/lesson.js"
 import { EnrollmentModel } from "../schema/enrollment.js"
 import { upload_image } from "../utils/upload_image.js"
+import { CourseModel } from "../schema/course.js"
 
 
 const get_lessons = async (req, res) => {
@@ -76,6 +77,9 @@ const create_lesson = async (req, res) => {
         await dbConnect()
         const lesson = new LessonModel({ topic, objectives, lessonType, resources, instructor_id, course_id })
         const saved_lesson = await lesson.save()
+        const course = await CourseModel.findById(course_id)
+        course.lessons.push(saved_lesson)
+        await course.save()
         res.status(200).json(saved_lesson)
     } catch (error) {
         res.status(400).send(error.message)
@@ -88,7 +92,6 @@ const create_lesson = async (req, res) => {
 const update_lesson = async (req, res) => {
     const role = req.decode.userType
     const { topic, objectives, lessonType, resources } = req.body
-    console.log(resources)
     let update = {}
     if (topic) update.topic = topic
     if (objectives) update.objectives = objectives
@@ -148,18 +151,21 @@ const delete_lesson = async (req, res) => {
 export const upload_resources = async (req, res) => {
 
     try {
-        const lesson = await LessonModel.findOne({ _id: req.params.lesson_id })
+        await dbConnect()
+        const lesson = await LessonModel.findById(req.params.lesson_id)
+        console.log(lesson)
         if (lesson) {
-            if (req.decode.userType === "admin" || (req.decode.userType === "admin" && req.decode._id == lesson.instructor_id)) {
+            if (req.decode.userType === "admin" || (req.decode.userType === "instructor" && req.decode._id == lesson.instructor_id)) {
+                console.log(lesson)
                 const uploadPromises = req.files.map(async (file) => {
                     // Convert the file buffer to a Base64 data URI
-                    console.log(file)
+                    // console.log(file)
                     const base64Image = file.buffer.toString('base64');
                     const imageDataURI = `data:${file.mimetype};base64,${base64Image}`;
 
                     // Upload to Cloudinary
                     const result = await upload_image(imageDataURI);
-                    console.log(result)
+                    // console.log(result)
                     const resource_details = {
                         title: file.originalname,
                         url: result.secure_url
@@ -168,8 +174,16 @@ export const upload_resources = async (req, res) => {
                 });
 
                 const imageUrls = await Promise.all(uploadPromises);
-                const update_with_resources = await LessonModel.findByIdAndUpdate(req.params.lesson_id, { resources: imageUrls })
-                res.json({ imageUrls });
+                const resources = lesson.resources.concat(imageUrls)
+                // console.log(resources)
+                const update_with_resources = await LessonModel.findByIdAndUpdate(
+                    req.params.lesson_id, { resources: resources },
+                    { new: true }
+                )
+                res.json({ update_with_resources });
+            }
+            else {
+                res.status(403).send("Unauthorised user")
             }
 
         }
@@ -177,8 +191,7 @@ export const upload_resources = async (req, res) => {
             res.status(403).send('Lesson not found');
         }
     } catch (error) {
-        console.log(error.message)
-        res.status(500).send('Upload failed');
+        res.status(500).send('Upload failed', error.message);
     }
 }
 

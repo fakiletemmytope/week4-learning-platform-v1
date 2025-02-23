@@ -57,6 +57,7 @@ export const create_user = async (req, res) => {
     try {
         if (userType == "instructor") {
             await dbConnect()
+            console.log("in")
             const savedUser = await user.save()
             const instructor = new InstructorModel(
                 {
@@ -69,26 +70,27 @@ export const create_user = async (req, res) => {
             const { first_name, last_name, _id, email, createdAt, updatedAt } = savedUser
             const payload = { id: _id, email: email }
             const token = getToken(payload, "20m")
-            const msg = `Dear ${first_name},\n\n\nYour account has being created successfully. Click on the link below to activate you account\n\n${URL}/api/user/activate?token=${token}\n\nWith love from,\nMINI LEARNING`
+            const msg = `Dear ${first_name},\n\n\nYour account has being created successfully. Click on the link below to activate you account\n\n${URL}/auth/activate?token=${token}\n\nWith love from,\nMINI LEARNING`
             //send email
             sendmail(email, "Token for activation", msg)
             res.status(200).json({
                 first_name, last_name, _id, email, createdAt, updatedAt, Instructor_info,
-                message: "activation link as beong sent to your email"
+                message: "activation link as been sent to your email"
             })
         }
-        await dbConnect()
-        const savedUser = await user.save()
-        const { first_name, last_name, _id, email, createdAt, updatedAt } = savedUser
-        const payload = { id: _id, email: email }
-        const token = getToken(payload, "20m")
-        const msg = `Dear ${first_name},\n Your account has being created successfully, {click on the link below to activate you account\n${URL}/activate?token=${token}\n With love from\nMINI LEARNING`
-        //send email
-        sendmail(email, "Token for activation", msg)
-        res.status(200).json({
-            first_name, last_name, _id, email, createdAt, updatedAt,
-            message: "activation link as beong sent to your email"
-        })
+        else {
+            await dbConnect()
+            const savedUser = await user.save()
+            const { first_name, last_name, _id, email, createdAt, updatedAt } = savedUser
+            const payload = { id: _id, email: email }
+            const token = getToken(payload, "20m")
+            const msg = `Dear ${first_name},\n\n\nYour account has being created successfully. Click on the link below to activate you account\n\n${URL}/auth/activate?token=${token}\n\nWith love from,\nMINI LEARNING`
+            sendmail(email, "Token for activation", msg)
+            res.status(200).json({
+                first_name, last_name, _id, email, createdAt, updatedAt,
+                message: "activation link has been sent to your email"
+            })
+        }
     } catch (error) {
         res.status(500).send(error.message)
     } finally {

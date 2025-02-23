@@ -1,14 +1,14 @@
 import mongoose from "mongoose"
 
-const {Schema, model} = mongoose
+const { Schema, model } = mongoose
 
 const InstructorSchema = new Schema(
     {
-        name: {type: String, required: true},
-        bio: {type: String, required: true, default: null},
-        userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'users' },
+        name: { type: String, required: true },
+        bio: { type: String, default: null },
+        userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     },
-    {timestamps: true}
+    { timestamps: true }
 )
 
-export const InstructorModel = model('instructors', InstructorSchema)
+export const InstructorModel = model('Instructor', InstructorSchema)

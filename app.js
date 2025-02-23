@@ -5,6 +5,8 @@ import { auth_router } from "./routes/auth.js";
 import { course_router } from "./routes/course.js";
 import { enrollment_router } from "./routes/enrollment.js";
 import { lesson_router } from "./routes/lesson.js";
+import { syncDb } from "./database/init_db.js";
+import { analytics_router } from "./routes/analytics.js";
 
 
 const app = express()
@@ -23,12 +25,14 @@ app.use('/api/users', user_router);
 app.use('/api/courses', course_router);
 app.use('/api/enrollments', enrollment_router)
 app.use('/api/lessons', lesson_router)
-app.get("/", (req, res) =>{
+app.use("/analytics", analytics_router)
+app.get("/", (req, res) => {
     res.redirect("https://documenter.getpostman.com/view/16249004/2sAYXEFJX2")
 })
 
 
 
-app.listen(PORT, ()=>{
-    console.log(`This is a mini learning platforn listening on port ${PORT}`)
+app.listen(PORT, async () => {
+    await syncDb()
+    console.log(`This is a mini learning platform version 1.0 listening on port ${PORT}`)
 })

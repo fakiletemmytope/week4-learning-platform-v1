@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "../middleware/authenticate.js";
+import { authenticate, unrestricted } from "../middleware/authenticate.js";
 import {
     create_course,
     get_courses,
@@ -15,7 +15,7 @@ const router = Router()
 
 router.get("/", get_courses)
 
-router.get("/:id", get_course)
+router.get("/:id", unrestricted, get_course)
 
 router.post("/", authenticate, isInstructor, validate_courseCreate, create_course)
 

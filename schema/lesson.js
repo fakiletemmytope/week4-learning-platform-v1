@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const { Schema, model } = mongoose
 
-const LessonType = {
+export const LessonType = {
     VIDEO: 'video',
     INTERACTIVE: 'interactive',
     SLIDE: 'slide'
@@ -24,8 +24,8 @@ const LessonSchema = new Schema(
             required: true
         },
         resources: { type: [ResourceSchema], required: false, default: [] },
-        instructor_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'users' },
-        course_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'courses' },
+        instructor_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+        course_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Course' },
 
     },
     { timestamps: true }
@@ -33,4 +33,4 @@ const LessonSchema = new Schema(
 
 LessonSchema.index({ topic: 1, course_id: 1 }, { unique: true });
 
-export const LessonModel = model('lessons', LessonSchema)
+export const LessonModel = model('Lesson', LessonSchema)

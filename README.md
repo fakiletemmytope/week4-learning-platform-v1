@@ -23,42 +23,44 @@ Each courses have one or more lessons which are created by the course instructor
 4. **Express**, this is a nodejs based framework that helps to simplifies the development of server-side applications by offering an easy-to-use API for routing, middleware, and HTTP utilities.
 5. **Nodejs**, the server environment.
 
-
 ### API Endpoints
 
-
-| Endpoint             | Method | Description                                                   |
-| -------------------- | ------ | ------------------------------------------------------------- |
-| `/api/users`       | GET    | Retrieve a list of all users.                                 |
-| `/api/users/:id`   | GET    | Retrieve detailed information about a specific user by ID.    |
-| `/api/users`       | POST   | Create a new user with the provided data.                     |
-| `/api/users/:id`   | PUT    | Update the information of a specific user by ID.              |
-| `/api/users/:id`   | DELETE | Delete a specific user by ID.                                 |
-| `/auth/login`      | POST   | Authenticate a user and return a JWT token.                   |
-| `/auth/logout`     | GET    | this logouts out a user and blacklisted the JWT token         |
-| `/api/courses`     | GET    | Retrieve a list of all courses.                               |
-| `/api/courses`     | POST   | Add a new course with the provided data.                     |
-| `/api/courses/:id` | PUT    | Update the details of a specific course by ID.               |
-| `/api/courses/:id` | DELETE | Remove a specific course by ID.                              |
-| `/api/courses/:id` | GET    | Retrieve the details of a course by ID.                       |
-| `/api/lessons/:id` | GET    | Retrieve detailed information about a specific lesson by ID. |
-| `/api/lessons/`    | GET    | Retrieve a list of all lessons.                               |
-| `/api/lessons/`    | POST   | Create a lesson                                               |
-| `/api/lessons/`:id | PUT    | Update the details of a specific lesson by ID                 |
-| `/api/lessons/`:id | DELETE | Remove a specific lesson by ID.                              |
-| /api/enrollments/    | POST   | To  enrol for a course                                       |
-| /api/enrollments/:id | GET    | Get the details for a specific enrollment by ID               |
-| /api/enrollments/    | GET    | Retrieve all enrollments                                      |
+| Endpoint                 | Method | Description                                                   |
+| ------------------------ | ------ | ------------------------------------------------------------- |
+| `/api/users`           | GET    | Retrieve a list of all users.                                 |
+| `/api/users/:id`       | GET    | Retrieve detailed information about a specific user by ID.    |
+| `/api/users`           | POST   | Create a new user with the provided data.                     |
+| `/api/users/:id`       | PUT    | Update the information of a specific user by ID.              |
+| `/api/users/:id`       | DELETE | Delete a specific user by ID.                                 |
+| `/auth/login`          | POST   | Authenticate a user and return a JWT token.                   |
+| `/auth/logout`         | GET    | this logouts out a user and blacklisted the JWT token         |
+| `/api/courses`         | GET    | Retrieve a list of all courses.                               |
+| `/api/courses`         | POST   | Add a new course with the provided data.                     |
+| `/api/courses/:id`     | PUT    | Update the details of a specific course by ID.               |
+| `/api/courses/:id`     | DELETE | Remove a specific course by ID.                              |
+| `/api/courses/:id`     | GET    | Retrieve the details of a course by ID.                       |
+| `/api/lessons/:id`     | GET    | Retrieve detailed information about a specific lesson by ID. |
+| `/api/lessons/`        | GET    | Retrieve a list of all lessons.                               |
+| `/api/lessons/`        | POST   | Create a lesson                                               |
+| `/api/lessons/`:id     | PUT    | Update the details of a specific lesson by ID                 |
+| `/api/lessons/`:id     | DELETE | Remove a specific lesson by ID.                              |
+| /api/enrollments/        | POST   | To  enrol for a course                                       |
+| /api/enrollments/:id     | GET    | Get the details for a specific enrollment by ID               |
+| /api/enrollments/        | GET    | Retrieve all enrollments                                      |
+| /analytica/lessons       | GET    | returns the data insight for the lessons                      |
+| /analytics/users         | GET    | returns the data insight for the users                        |
+| /analytics/courses       | GET    | returns the data insight for the courses                      |
+| /auth/getactivationtoken | POST   | For generating activation token for registered users          |
 
 ### INSTALLATION
 
 ```
-git clone https://github.com/fakiletemmytope/week3-learning-platform.git
-cd week3-learning-platform
+git clone https://github.com/fakiletemmytope/week4-learning-platform-v1.git
+cd week4-learning-platform-v1
 npm install
 npm start
 ```
 
 ### Documentation
 
-The documentation for the endpoints can be accessed [here](https://documenter.getpostman.com/view/16249004/2sAYXEFJX2)
+The documentation for the endpoints can be accessed [here](https://documenter.getpostman.com/view/16249004/2sAYdcsCkn)

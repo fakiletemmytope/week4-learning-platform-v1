@@ -27,7 +27,9 @@ app.use('/api/enrollments', enrollment_router)
 app.use('/api/lessons', lesson_router)
 app.use("/analytics", analytics_router)
 app.get("/", (req, res) => {
-    res.redirect("https://documenter.getpostman.com/view/16249004/2sAYXEFJX2")
+    // res.redirect("https://documenter.getpostman.com/view/16249004/2sAYXEFJX2")
+    res.redirect("https://documenter.getpostman.com/view/16249004/2sAYdcsCkn")
+    
 })
 
 
